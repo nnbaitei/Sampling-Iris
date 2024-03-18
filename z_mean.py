@@ -2,6 +2,7 @@ import pandas as pd
 import scipy.stats as stats
 import math
 
+#ดึงข้อมูลจากการสุ่มก่อนหน้า
 train_data = pd.read_csv('train_data.csv')
 valid_data = pd.read_csv('valid_data.csv')
 test_data = pd.read_csv('test_data.csv')
@@ -11,7 +12,6 @@ test_data = pd.read_csv('test_data.csv')
 # sepal width,2.0,4.4,3.05,0.43
 # petal length,1.0,6.9,3.76,1.76
 # petal width,0.1,2.5,1.20,0.76
-
 mean_sp_length = 5.84
 mean_sp_width = 3.05
 mean_pt_length = 3.76
@@ -21,6 +21,7 @@ sd_sp_width = 0.43
 sd_pt_length = 1.76
 sd_pt_width = 0.76
 
+#หาค่า mean ของแต่ละ artibutes ของแต่ละชุดข้อมูล
 mean_sp_length_train = sum(train_data['sepal length'])/80
 mean_sp_width_train = sum(train_data['sepal width'])/80
 mean_pt_length_train = sum(train_data['petal length'])/80
@@ -34,28 +35,35 @@ mean_sp_width_test = sum(test_data['sepal width'])/32
 mean_pt_length_test = sum(test_data['petal length'])/32
 mean_pt_width_test = sum(test_data['petal width'])/32
 
+#หาSD Barของแต่ละ artibutes
 n = 150
 sdb_sp_length = sd_sp_length/math.sqrt(n)
 sdb_sp_width = sd_sp_width/math.sqrt(n)
 sdb_pt_length = sd_pt_length/math.sqrt(n)
 sdb_pt_width = sd_pt_width/math.sqrt(n)
 
+#z ของ training set
 z_train_sp_length = (mean_sp_length_train - mean_sp_length)/sdb_sp_length
 z_train_sp_width = (mean_sp_width_train - mean_sp_width)/sdb_sp_width
 z_train_pt_length = (mean_pt_length_train - mean_pt_length)/sdb_pt_length
 z_train_pt_width = (mean_pt_width_train - mean_pt_width)/sdb_pt_width
-
+#z ของ validation set
 z_valid_sp_length = (mean_sp_length_valid - mean_sp_length)/sdb_sp_length
 z_valid_sp_width = (mean_sp_width_valid - mean_sp_width)/sdb_sp_width
 z_valid_pt_length = (mean_pt_length_valid - mean_pt_length)/sdb_pt_length
 z_valid_pt_width = (mean_pt_width_valid - mean_pt_width)/sdb_pt_width
-
+#z ของ testing set
 z_test_sp_length = (mean_sp_length_test - mean_sp_length)/sdb_sp_length
 z_test_sp_width = (mean_sp_width_test - mean_sp_width)/sdb_sp_width
 z_test_pt_length = (mean_pt_length_test - mean_pt_length)/sdb_pt_length
 z_test_pt_width = (mean_pt_width_test - mean_pt_width)/sdb_pt_width
 
+#z critical
 critical = stats.norm.ppf(0.025)
+
+#ค่าเฉลี่ยของความยาวใบเลี้ยง, ความกว้างกลีบเลี้ยง, ความยาวกลีบดอก, ความกว้างกลีบดอก เท่ากัน ในระดับนัยสำคัญ (Significant level) ที่ 0.05
+Ho = "mean of sepal length, sepal width, petal length and petal width are equal"
+Ha = "mean of sepal length, sepal width, petal length and petal width are not equal"
 
 #Reject H0 or Not Reject H0
 if z_train_sp_length < critical:
@@ -107,14 +115,25 @@ if z_test_pt_width < critical:
 else:
     result_pt_width_test = "Accept H0"
 
+#แสดงข้อมูล
 data = {
-    "sepal length": [mean_sp_length, sd_sp_length, mean_sp_length_train, mean_sp_length_valid, mean_sp_length_test, z_train_sp_length, z_valid_sp_length, z_test_sp_length, critical, result_sp_length_train, result_sp_length_valid, result_sp_length_test],
-    "sepal width": [mean_sp_width, sd_sp_length, mean_sp_width_train, mean_sp_width_valid, mean_sp_width_test, z_train_sp_width, z_valid_sp_width, z_test_sp_width, critical, result_sp_width_train, result_sp_width_valid, result_sp_width_test],
-    "petal length": [mean_pt_length, sd_pt_length, mean_pt_length_train, mean_pt_length_valid, mean_pt_length_test, z_train_pt_length, z_valid_pt_length, z_test_pt_length, critical, result_pt_length_train, result_pt_length_valid, result_pt_length_test],
-    "petal width": [mean_pt_width, sd_pt_width, mean_pt_width_train, mean_pt_width_valid, mean_pt_width_test, z_train_pt_width, z_valid_pt_width, z_test_pt_width, critical, result_pt_width_train, result_pt_width_valid, result_pt_width_test]
+    "sepal length": [mean_sp_length, sd_sp_length, mean_sp_length_train, mean_sp_length_valid, 
+                     mean_sp_length_test, z_train_sp_length, z_valid_sp_length, z_test_sp_length, critical, 
+                     result_sp_length_train, result_sp_length_valid, result_sp_length_test],
+    "sepal width": [mean_sp_width, sd_sp_length, mean_sp_width_train, mean_sp_width_valid, mean_sp_width_test, 
+                    z_train_sp_width, z_valid_sp_width, z_test_sp_width, critical, result_sp_width_train, 
+                    result_sp_width_valid, result_sp_width_test],
+    "petal length": [mean_pt_length, sd_pt_length, mean_pt_length_train, mean_pt_length_valid, mean_pt_length_test, 
+                     z_train_pt_length, z_valid_pt_length, z_test_pt_length, critical, result_pt_length_train, 
+                     result_pt_length_valid, result_pt_length_test],
+    "petal width": [mean_pt_width, sd_pt_width, mean_pt_width_train, mean_pt_width_valid, mean_pt_width_test, 
+                    z_train_pt_width, z_valid_pt_width, z_test_pt_width, critical, result_pt_width_train, 
+                    result_pt_width_valid, result_pt_width_test]
 }
 
-df = pd.DataFrame(data, index=["Mean", "SD", "Mean of Train set", "Mean of Valid set", "Mean of Test set", "z train", "z valid", "z test", "Z critical", "result(training set)", "result(validation set", "result(testing set)"])
+df = pd.DataFrame(data, index=["Mean", "SD", "Mean of Train set", "Mean of Valid set", "Mean of Test set", 
+                               "z train", "z valid", "z test", "Z critical", "result(training set)", 
+                               "result(validation set", "result(testing set)"])
 
 print(df)
 
