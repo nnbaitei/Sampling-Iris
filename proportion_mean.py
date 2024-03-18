@@ -21,8 +21,8 @@ validation_set.to_csv('valid_data.csv')
 testing_set.to_csv('test_data.csv')
 
 #1.สัดส่วนของชนิดดอกไม้ ทั้ง 3 ชนิด ทั้ง 3 ชุดข้อมูล มีปริมาณเฉลี่ยที่เท่ากัน ในระดับนัยสำคัญ (Significant level) ที่ 0.05
-Ho = "proportion of mean in every dataset equal 1/3"
-Ha = "proportion of mean in every dataset not equal 1/3"
+Ho = "proportion of mean in every dataset equal"
+Ha = "proportion of mean in every dataset not equal"
 num_train_vir = len(training_set[training_set['class'] == 'Iris-virginica'])
 num_train_set = len(training_set[training_set['class'] == 'Iris-setosa'])
 num_train_vers = len(training_set[training_set['class'] == 'Iris-versicolor'])
